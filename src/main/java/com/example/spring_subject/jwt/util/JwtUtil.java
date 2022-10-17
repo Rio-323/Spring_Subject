@@ -3,6 +3,7 @@ package com.example.spring_subject.jwt.util;
 import com.example.spring_subject.entity.RefreshToken;
 import com.example.spring_subject.jwt.dto.TokenDto;
 import com.example.spring_subject.repository.RefreshTokenRepository;
+import com.example.spring_subject.security.user.UserDetailsServiceImpl;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -10,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -24,11 +28,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class JwtUtil {
     private final RefreshTokenRepository refreshTokenRepository;
+    private final UserDetailsServiceImpl userDetailsService;
 
     public static final String ACCESS_TOKEN = "Access_Token";
     public static final String REFRESH_TOKEN = "Refresh_Token";
-    private static final long ACCESS_TIME = 60 * 1000L; // 1000L -> 1초
-    private static final long REFRESH_TIME = 120 * 1000L; // 1000L -> 1초
+    private static final long ACCESS_TIME = 10 * 1000L; // 1000L -> 1초
+    private static final long REFRESH_TIME = 60 * 1000L; // 1000L -> 1초
     // Date가 Long 타입을 파라미터로 받기 때문에 Long으로 지정
 
 
@@ -90,9 +95,18 @@ public class JwtUtil {
         // DB에 저장한 refresh 토큰과 비교
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByAccountEmail ( getEmailFromToken ( token ) );
 
+        return refreshToken.isPresent () && token.equals ( refreshToken.get ().getRefreshToken () );
+        // DB에 refreshToken이 존재하는지 확인하고 있다면 내가 보내준 토큰과 일치하는지 확인.
+
     }
 
     // 인증 객체 생성
+    public Authentication crateAuthentication(String email) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername ( email );
+        return new UsernamePasswordAuthenticationToken ( userDetails, "", userDetails.getAuthorities () );
+        // 시큐리티 내부에 있는 매서드로 토큰 생성
+    }
+
 
     // 토큰에서 email을 가져오는 기능
     public String getEmailFromToken(String token) {
