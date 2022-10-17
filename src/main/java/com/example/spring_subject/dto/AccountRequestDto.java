@@ -12,14 +12,14 @@ import javax.validation.constraints.Size;
 public class AccountRequestDto {
 
     @NotBlank
-    @Size(min = 4, max = 12, message = "{member.nickname.size}")
+    @Size(min = 4, max = 12, message = "{account.nickname.size}")
     @Pattern(regexp = "[a-z\\d]*${3,12}", message = "{member.nickname.pattern}")
     private String email;
 
     @NotBlank
-    @Size(min = 8, max = 20, message = "{member.password.size}")
+    @Size(min = 8, max = 20, message = "{account.password.size}")
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{8,16}$"
-            , message = "{member.password.pattern}")
+            , message = "{account.password.pattern}")
     private String password;
 
     public AccountRequestDto(String email, String password) {
