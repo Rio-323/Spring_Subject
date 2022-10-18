@@ -32,8 +32,8 @@ public class JwtUtil {
 
     public static final String ACCESS_TOKEN = "Access_Token";
     public static final String REFRESH_TOKEN = "Refresh_Token";
-    private static final long ACCESS_TIME = 10 * 1000L; // 1000L -> 1초
-    private static final long REFRESH_TIME = 60 * 1000L; // 1000L -> 1초
+    private static final long ACCESS_TIME = 10 * 60 * 1000L; // 1000L -> 1초
+    private static final long REFRESH_TIME = 10 * 60 * 1000L; // 1000L -> 1초
     // Date가 Long 타입을 파라미터로 받기 때문에 Long으로 지정
 
 
@@ -79,7 +79,7 @@ public class JwtUtil {
     // 토큰 검증
     public Boolean tokenValidation(String token) {
         try {
-            Jwts.parserBuilder ().setSigningKey ( key ).build ().parseClaimsJwt ( token );
+            Jwts.parserBuilder ().setSigningKey ( key ).build ().parseClaimsJws ( token );
             return true;
         } catch (Exception ex) {
             log.error ( ex.getMessage () );
@@ -110,6 +110,6 @@ public class JwtUtil {
 
     // 토큰에서 email을 가져오는 기능
     public String getEmailFromToken(String token) {
-        return Jwts.parserBuilder ().setSigningKey ( key ).build ().parseClaimsJwt ( token ).getBody ().getSubject ();
+        return Jwts.parserBuilder ().setSigningKey ( key ).build ().parseClaimsJws ( token ).getBody ().getSubject ();
     }
 }

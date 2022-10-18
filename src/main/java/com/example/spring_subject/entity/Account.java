@@ -1,6 +1,7 @@
 package com.example.spring_subject.entity;
 
 import com.example.spring_subject.dto.AccountRequestDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +24,7 @@ public class Account {
     private String email;
 
     @NotBlank
+    @JsonIgnore
     private String password;
 
     public Account(AccountRequestDto accountRequestDto) {
