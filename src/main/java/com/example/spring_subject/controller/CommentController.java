@@ -23,11 +23,11 @@ public class CommentController {
     private final PostRepository postRepository;
 
     @PostMapping("/auth/comment")
-    public Comment createComment(@RequestBody CommentRequestDto commentRequestDto){
+    public Comment createComment(@RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
         Post post = postRepository.findById(commentRequestDto.getPostid()).orElseThrow(
                 ()->new IllegalArgumentException("아이디가 존재하지 않습니다.")
         );
-        Comment comment = new Comment(commentRequestDto, post);
+        Comment comment = new Comment(commentRequestDto, post, userDetailsImpl.getAccount ());
         return commentRepository.save(comment);
     }
 
@@ -37,8 +37,8 @@ public class CommentController {
 
     @PutMapping("/auth/comment/{id}")
     public String updateComment(@PathVariable Long id, @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl ) throws Exception {
-        Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 없습니다."));
-        String email = comment.getEmail();
+        Comment comment = this.commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 없습니다."));
+        String email = comment.getAccount ().getEmail ();
         if(userDetailsImpl.getAccount().getEmail().equals(email)){
             commentService.update(id, commentRequestDto);
         }else {
@@ -51,8 +51,8 @@ public class CommentController {
     @DeleteMapping("/auth/comment/{id}")
     public String deleteComment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) throws Exception {
 
-        Comment comment = commentRepository.findById(id).orElseThrow(()->new IllegalArgumentException("id가 없습니다."));
-        String email =comment.getEmail();
+        Comment comment = this.commentRepository.findById(id).orElseThrow(()->new IllegalArgumentException("id가 없습니다."));
+        String email = comment.getAccount ().getEmail ();
         if(userDetailsImpl.getAccount().getEmail().equals(email)){
             commentRepository.deleteById(id);
         }else {throw new Exception("사용자가 일치하지 않습니다.");
