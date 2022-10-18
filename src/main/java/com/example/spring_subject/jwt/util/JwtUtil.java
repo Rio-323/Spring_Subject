@@ -79,7 +79,7 @@ public class JwtUtil {
     // 토큰 검증
     public Boolean tokenValidation(String token) {
         try {
-            Jwts.parserBuilder ().setSigningKey ( key ).build ().parseClaimsJwt ( token );
+            Jwts.parserBuilder ().setSigningKey ( key ).build ().parseClaimsJws ( token );
             return true;
         } catch (Exception ex) {
             log.error ( ex.getMessage () );
@@ -110,6 +110,6 @@ public class JwtUtil {
 
     // 토큰에서 email을 가져오는 기능
     public String getEmailFromToken(String token) {
-        return Jwts.parserBuilder ().setSigningKey ( key ).build ().parseClaimsJwt ( token ).getBody ().getSubject ();
+        return Jwts.parserBuilder ().setSigningKey ( key ).build ().parseClaimsJws ( token ).getBody ().getSubject ();
     }
 }
