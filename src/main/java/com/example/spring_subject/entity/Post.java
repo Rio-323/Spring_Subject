@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,12 +24,10 @@ public class Post extends Timestamped{
     @ManyToOne
     private Account account;
 
-
-
-
     private String contents;
 
-
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<Comment> comment = new ArrayList<> ();
 
     public Post(PostDto postDto){
         this.title = postDto.getTitle();

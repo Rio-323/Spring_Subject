@@ -17,21 +17,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostController {
 
-
     private final PostService postService;
-
 
     //게시글 전체조회
     @GetMapping("/post")
     public List<Post> getPost(){ return postService.getPost();}
 
-
     //게시글 한개조회
     @GetMapping("/post/{id}")
-    public Post getOne(Long id){
+    public Post getOne(@PathVariable Long id){
         return postService.getOne(id);
     }
-
 
     //게시글 생성
     @PostMapping("/post")
@@ -53,6 +49,4 @@ public class PostController {
         postService.deletePost(id);
         return "삭제된 아이디 : "+ id;
     }
-
-
 }

@@ -2,7 +2,9 @@ package com.example.spring_subject.controller;
 
 import com.example.spring_subject.dto.CommentRequestDto;
 import com.example.spring_subject.entity.Comment;
+import com.example.spring_subject.entity.Post;
 import com.example.spring_subject.repository.CommentRepository;
+import com.example.spring_subject.repository.PostRepository;
 import com.example.spring_subject.security.user.UserDetailsImpl;
 import com.example.spring_subject.service.CommentService;
 import lombok.RequiredArgsConstructor;
