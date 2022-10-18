@@ -1,14 +1,14 @@
 GET http://localhost:8080/api/issue/token
 Accept: application/json
-Refresh_Token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQG5hdmVyLmNvbSIsImV4cCI6MTY2NjAxNTkwMSwiaWF0IjoxNjY2MDE1ODQxfQ.j6h6GzLM-fZDFJq1DfMQgPHTTLsl8ZKWTpmfxl81u_c
+Refresh_Token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTJAbmF2ZXIuY29tIiwiZXhwIjoxNjY2MDY5MzQ1LCJpYXQiOjE2NjYwNjkyODV9.XPxwUf9mx5FnwUaRwt3vWM46Btlr6IKSEO30-vxSWeM
 
 ###
 POST http://localhost:8080/api/account/login
 Content-Type: application/json
 
 {
-   "email" : "user@naver.com",
-   "password" : "1234"
+   "email" : "user12@naver.com",
+   "password" : "abc1234!"
 }
 
 ###
@@ -16,8 +16,8 @@ POST http://localhost:8080/api/account/signup
 Content-Type: application/json
 
 {
-   "email" : "user@naver.com",
-   "password" : "1234"
+   "email" : "user12@naver.com",
+   "password" : "abc1234!"
 }
 
 ###
