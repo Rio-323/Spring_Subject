@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class AccountRequestDto {
 
-<<<<<<< HEAD
+
     @NotBlank
     @Size(min = 4, max = 60, message = "{account.nickname.size}")
     @Pattern(regexp = "^[a-zA-Z0-9+-\\_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$", message = "{account.nickname.pattern}")

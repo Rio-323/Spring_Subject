@@ -32,8 +32,8 @@ public class JwtUtil {
 
     public static final String ACCESS_TOKEN = "Access_Token";
     public static final String REFRESH_TOKEN = "Refresh_Token";
-    private static final long ACCESS_TIME = 10 * 1000L; // 1000L -> 1초
-    private static final long REFRESH_TIME = 60 * 1000L; // 1000L -> 1초
+    private static final long ACCESS_TIME = 10 * 60 * 1000L; // 1000L -> 1초
+    private static final long REFRESH_TIME = 10 * 60 * 1000L; // 1000L -> 1초
     // Date가 Long 타입을 파라미터로 받기 때문에 Long으로 지정
 
 
