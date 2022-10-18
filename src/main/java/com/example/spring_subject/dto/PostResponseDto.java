@@ -16,18 +16,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostResponseDto {
-
-
     private Long postId;
-
     private Account account;
-
     private String title;
-
     private String contents;
-
     private LocalDateTime createdAt;
-
 
     public PostResponseDto(Post post){
         this.postId = post.getPostId();
