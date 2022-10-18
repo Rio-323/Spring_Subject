@@ -1,8 +1,11 @@
 package com.example.spring_subject.jwt.filter;
 
+import com.example.spring_subject.global.dto.GlobalRequestDto;
 import com.example.spring_subject.jwt.util.JwtUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -29,7 +32,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // 토큰이 있는지 확인
         if(accessToken != null) {
             if(!jwtUtil.tokenValidation ( accessToken )) { // 유효성 검사에서 false라면 if 내부 실행
-                System.out.println ("JwtAuthFilter.doFilterInternal");
+               jwtExceptionHandler(response, "AccessToken Expired", HttpStatus.BAD_REQUEST );
                 // 실행이 안되었다면 토큰에 문제가 없음.
                 return;
             }
@@ -37,7 +40,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             setAuthentication ( jwtUtil.getEmailFromToken (accessToken) );
         }else if (refreshToken != null) {
             if(!jwtUtil.refreshTokenValidation ( refreshToken )) { // 유효성 검사에서 false라면 if 내부 실행
-                System.out.println ("JwtAuthFilter.doFilterInternal");
+                jwtExceptionHandler(response, "refreshToken Expired", HttpStatus.BAD_REQUEST );
                 // 실행이 안되었다면 refresh 토큰 문제가 없음.
                 return;
             }
@@ -54,5 +57,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         Authentication authentication = jwtUtil.crateAuthentication ( email );
         SecurityContextHolder.getContext ().setAuthentication ( authentication );
         // Security가 Holder를 통해 접근해서 authentication에 인증객체가 있는지 없는지 확인
+    }
+
+    public void jwtExceptionHandler(HttpServletResponse response, String msg, HttpStatus status) {
+        response.setStatus ( status.value () );
+        response.setContentType ( "application/json" );
+
+        try {
+            String json = new ObjectMapper ().writeValueAsString ( new GlobalRequestDto (msg, status.value ()) );
+            response.getWriter ().write ( json );
+        } catch (Exception e) {
+            log.error ( e.getMessage () );
+        }
     }
 }

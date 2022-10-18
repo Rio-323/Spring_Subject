@@ -13,8 +13,8 @@ public class AccountRequestDto {
 
 <<<<<<< HEAD
     @NotBlank
-    @Size(min = 4, max = 12, message = "{account.nickname.size}")
-    @Pattern(regexp = "[a-z\\d]*${3,12}", message = "{member.nickname.pattern}")
+    @Size(min = 4, max = 60, message = "{account.nickname.size}")
+    @Pattern(regexp = "^[a-zA-Z0-9+-\\_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$", message = "{account.nickname.pattern}")
     private String email;
 
     @NotBlank
