@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -25,28 +27,28 @@ public class PostController {
 
     //게시글 한개조회
     @GetMapping("/post/{id}")
-    public Post getOne(@PathVariable Long id){
+    public PostResponseDto getOne(@PathVariable Long id){
         return postService.getOne(id);
     }
 
     //게시글 생성
     @PostMapping("/post")
-    public PostResponseDto post(@RequestBody PostDto postDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public PostResponseDto post(@RequestBody @Valid PostDto postDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
 
         return postService.post(postDto, userDetails);
     }
 
     //게시글 업데이트
-    @PutMapping("/post/update/{id}")
-    public Post update(@PathVariable Long id,@RequestBody PostDto postDto){
+    @PutMapping("/post/{id}")
+    public PostResponseDto update(@PathVariable Long id, @RequestBody PostDto postDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
 
-        return  postService.update(id,postDto);
+        return  postService.update(id,postDto, userDetails.getAccount());
     }
 
     //게시글 삭제
-    @DeleteMapping("/post/delete/{id}")
-    public String delete(@PathVariable Long id){
-        postService.deletePost(id);
+    @DeleteMapping("/post/{id}")
+    public String delete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        postService.deletePost(id, userDetails.getAccount());
         return "삭제된 아이디 : "+ id;
     }
 }
