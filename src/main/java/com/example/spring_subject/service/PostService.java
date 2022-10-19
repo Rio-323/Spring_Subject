@@ -12,10 +12,12 @@ import com.example.spring_subject.security.user.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,34 +46,52 @@ public class PostService {
     //}
 
     //게시글 가져오기
+    @Transactional
     public List<Post> getPost() { return postRepository.findAllByOrderByCreatedAtDesc();}
 
     //게시글 하나 가져오기
-    public Post getOne(Long id){
-        return postRepository.findById(id).orElseThrow(
+    @Transactional
+    public PostResponseDto getOne(Long id){
+        Post post =  postRepository.findById(id).orElseThrow(
                 ()-> new IllegalArgumentException("아이디가 존재하지 않습니다.")
         );
+        PostResponseDto postResponseDto = new PostResponseDto(post);
+        return postResponseDto;
     }
 
 
 
     //글 삭제하기
-    public String deletePost(Long postId){
-        Post delete = postRepository.findById(postId).orElseThrow(
+    @Transactional
+    public String deletePost(Long postId,  Account account){
+        Post post = postRepository.findById(postId).orElseThrow(
                 ()-> new IllegalArgumentException("해당글이 없습니다")
         );
-        postRepository.deleteById(postId);
-        return "섹제된 게시글 번호 : "+postId;
+        if(account.getId() == (post.getAccount().getId())){
+            postRepository.deleteById(postId);
+            return "섹제된 게시글 번호 : "+postId;
+        }else{
+            throw new RuntimeException("아이디가 다릅니다.") ;
+        }
+
+
+
     }
 
     //게시글 업데이트
-    public Post update(Long id, PostDto postDto){
-        Post update = postRepository.findById(id).orElseThrow(
+    @Transactional
+    public PostResponseDto update(Long id, PostDto postDto, Account account){
+        Post post = postRepository.findById(id).orElseThrow(
                 ()-> new IllegalArgumentException("해당글이 없습니다")
         );
-        update.update(postDto);
-        postRepository.save(update);
-        return update;
+
+        if(post.getAccount().getId() == account.getId()){
+            post.update(postDto);
+            return new PostResponseDto(post);
+        }else {
+            throw new RuntimeException("작성자가 아닙니다.");
+        }
+
     }
 
 
