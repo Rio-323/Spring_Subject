@@ -18,6 +18,7 @@ public class PostResponseDto {
     private String title;
     private String contents;
     private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 
     public PostResponseDto(Post post){
         this.postId = post.getPostId();
@@ -25,5 +26,6 @@ public class PostResponseDto {
         this.account = post.getAccount();
         this.contents = post.getContents();
         this.createdAt = post.getCreatedAt();
+        this.modifiedAt = post.getModifiedAt();
     }
 }
