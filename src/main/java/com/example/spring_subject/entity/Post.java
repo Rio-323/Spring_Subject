@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,15 +21,20 @@ public class Post extends Timestamped{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
+
+    @NotBlank
     private String title;
 
     @ManyToOne
     private Account account;
 
+    @NotBlank
     private String contents;
 
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Comment> comment = new ArrayList<> ();
+
+
 
     public Post(PostDto postDto){
         this.title = postDto.getTitle();
