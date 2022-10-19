@@ -25,7 +25,7 @@ public class CommentController {
     @PostMapping("/comment/{id}")
     public Comment createComment(@PathVariable Long id, @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
         Post post = postRepository.findById(id).orElseThrow(
-                ()->new IllegalArgumentException("아이디가 존재하지 않습니다.")
+                ()->new IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
         );
         Comment comment = new Comment(commentRequestDto, post, userDetailsImpl.getAccount());
         return commentRepository.save(comment);
@@ -42,7 +42,7 @@ public class CommentController {
         if(userDetailsImpl.getAccount().getEmail().equals(email)){
             commentService.update(id, commentRequestDto);
         }else {
-            throw new Exception("사용자가 일치하지 않습니다.");
+            throw new Exception("작성자만 수정 가능합니다.");
         }
         return "댓글 수정완료";
     }
@@ -50,12 +50,12 @@ public class CommentController {
     @DeleteMapping("/comment/{id}")
     public String deleteComment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) throws Exception {
 
-        Comment comment = this.commentRepository.findById(id).orElseThrow(()->new IllegalArgumentException("id가 없습니다."));
+        Comment comment = this.commentRepository.findById(id).orElseThrow(()->new IllegalArgumentException("해당 댓글이 없습니다."));
         String email = comment.getAccount().getEmail();
         if(userDetailsImpl.getAccount().getEmail().equals(email)){
             commentRepository.deleteById(id);
-        }else {throw new Exception("사용자가 일치하지 않습니다.");
+        }else {throw new Exception("작성자만 삭제 가능합니다.");
         }
-        return  "댓글삭제완료";
+        return  "댓글 삭제완료";
     }
 }
