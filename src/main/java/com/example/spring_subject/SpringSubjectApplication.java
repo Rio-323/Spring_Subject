@@ -10,7 +10,6 @@ public class SpringSubjectApplication {
     public static void main(String[] args) {
         SpringApplication.run ( SpringSubjectApplication.class, args );
     }
-
 }
 
 
