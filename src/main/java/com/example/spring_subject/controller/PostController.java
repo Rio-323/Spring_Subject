@@ -33,7 +33,7 @@ public class PostController {
 
     //게시글 생성
     @PostMapping("/post")
-    public PostResponseDto post(@RequestBody @Valid PostDto postDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public PostResponseDto post(@RequestBody PostDto postDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
 
         return postService.post(postDto, userDetails);
     }

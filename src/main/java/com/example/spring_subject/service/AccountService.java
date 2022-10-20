@@ -1,21 +1,23 @@
 package com.example.spring_subject.service;
 
-import com.example.spring_subject.dto.AccountRequestDto;
-import com.example.spring_subject.dto.LoginRequestDto;
-import com.example.spring_subject.entity.Account;
-import com.example.spring_subject.entity.RefreshToken;
+import com.example.spring_subject.dto.*;
+import com.example.spring_subject.entity.*;
 import com.example.spring_subject.global.dto.GlobalRequestDto;
 import com.example.spring_subject.jwt.dto.TokenDto;
 import com.example.spring_subject.jwt.util.JwtUtil;
 import com.example.spring_subject.repository.AccountRepository;
 import com.example.spring_subject.repository.RefreshTokenRepository;
+import com.example.spring_subject.security.user.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -44,6 +46,7 @@ public class AccountService {
         return new GlobalRequestDto ("Success SignUp", HttpStatus.OK.value () ); // status code = 200
     }
 
+    @Transactional
     public GlobalRequestDto login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         // 로그인 처리 후 토큰까지 생성 후 저장
         Account account = accountRepository.findByEmail ( loginRequestDto.getEmail () ).orElseThrow (
@@ -73,9 +76,35 @@ public class AccountService {
         return new GlobalRequestDto ("Success Login", HttpStatus.OK.value () );
     }
 
+
     private void setHeader(HttpServletResponse response, TokenDto tokenDto) {
         // 토큰을 헤더에 세팅
         response.addHeader ( JwtUtil.ACCESS_TOKEN, tokenDto.getAccessToken () );
         response.addHeader ( JwtUtil.REFRESH_TOKEN, tokenDto.getRefreshToken () );
+    }
+
+
+    @Transactional
+    public AccountResponseDto mypage(UserDetailsImpl userDetails){
+        Account account = accountRepository.findById(userDetails.getAccount().getId()).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 계정입니다")
+        );
+        List<Post> mypost = account.getPost();
+        List<PostResponseDto> postlist = new ArrayList<>();
+        for(Post post : mypost){
+            postlist.add(new PostResponseDto(post));
+        }
+        List<Comment> myComment = account.getComment();
+        List<CommentResponseDto> commentList = new ArrayList<>();
+        for(Comment comment : myComment){
+            commentList.add(new CommentResponseDto(comment));
+        }
+        List<Heart> myHeart = account.getHeart();
+        List<Long> heartPostId = new ArrayList<>();
+        for(Heart heart : myHeart){
+            heartPostId.add(heart.getPost().getPostId());
+        }
+
+        return new AccountResponseDto(account.getEmail(), postlist, commentList, heartPostId);
     }
 }

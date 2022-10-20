@@ -23,11 +23,11 @@ public class Post extends Timestamped{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
-
     @NotBlank
     private String title;
 
     @ManyToOne
+    @JoinColumn(name = "account_id")
     private Account account;
 
     @NotBlank

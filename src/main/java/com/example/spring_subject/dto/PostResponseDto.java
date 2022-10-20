@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class PostResponseDto {
     private Long postId;
-    private Account account;
+    private String account;
     private String title;
     private String contents;
     private LocalDateTime createdAt;
@@ -23,7 +23,7 @@ public class PostResponseDto {
     public PostResponseDto(Post post){
         this.postId = post.getPostId();
         this.title = post.getTitle();
-        this.account = post.getAccount();
+        this.account = post.getAccount().getEmail();
         this.contents = post.getContents();
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();

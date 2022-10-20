@@ -1,6 +1,7 @@
 package com.example.spring_subject.controller;
 
 import com.example.spring_subject.dto.AccountRequestDto;
+import com.example.spring_subject.dto.AccountResponseDto;
 import com.example.spring_subject.dto.LoginRequestDto;
 import com.example.spring_subject.global.dto.GlobalRequestDto;
 import com.example.spring_subject.jwt.util.JwtUtil;
@@ -26,6 +27,11 @@ public class AccountController {
     public GlobalRequestDto signup(@RequestBody @Valid AccountRequestDto accountRequestDto) {
         // Http Body안에 들어가 있는 값을 accountRequestDto 받아옴.
         return accountService.signup(accountRequestDto);
+    }
+
+    @GetMapping("/account")
+    public AccountResponseDto mypage(@AuthenticationPrincipal UserDetailsImpl userDetails){
+       return accountService.mypage(userDetails);
     }
 
     @PostMapping("/account/login")

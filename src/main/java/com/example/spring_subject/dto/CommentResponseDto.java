@@ -13,14 +13,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CommentResponseDto {
     private Long commentId;
-    private Account account;
+    private String account;
     private String comment;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
     public CommentResponseDto(Comment comment){
         this.commentId = comment.getCommentId();
-        this.account = comment.getAccount();
+        this.account = comment.getAccount().getEmail();
         this.comment = comment.getComment();
         this.createdAt = comment.getCreatedAt();
         this.modifiedAt = comment.getModifiedAt();
