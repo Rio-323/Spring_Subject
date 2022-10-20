@@ -35,7 +35,6 @@ public class PostService {
         postRepository.save(post);
         PostResponseDto postResponseDto = new PostResponseDto(post);
         return postResponseDto;
-
     }
     //{
     //    id : 1,
@@ -67,15 +66,12 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow(
                 ()-> new IllegalArgumentException("해당글이 없습니다")
         );
-        if(account.getId() == (post.getAccount().getId())){
+        if(account.getId().equals(post.getAccount().getId())){
             postRepository.deleteById(postId);
-            return "섹제된 게시글 번호 : "+postId;
+            return "삭제된 게시글 번호 : "+postId;
         }else{
             throw new RuntimeException("아이디가 다릅니다.") ;
         }
-
-
-
     }
 
     //게시글 업데이트
@@ -85,16 +81,11 @@ public class PostService {
                 ()-> new IllegalArgumentException("해당글이 없습니다")
         );
 
-        if(post.getAccount().getId() == account.getId()){
+        if(post.getAccount().getId().equals(account.getId())){
             post.update(postDto);
             return new PostResponseDto(post);
         }else {
             throw new RuntimeException("작성자가 아닙니다.");
         }
-
     }
-
-
-
-
 }

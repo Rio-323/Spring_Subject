@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionController {
 
-    @ExceptionHandler(value = IllegalArgumentException.class)
-    public GlobalRequestDto customExceptionHandler(IllegalArgumentException ex) {
+    @ExceptionHandler(value = Exception.class)
+    public GlobalRequestDto customExceptionHandler(Exception ex) {
         return new GlobalRequestDto(ex.getMessage(), HttpStatus.BAD_REQUEST.value () );
     }
 }
